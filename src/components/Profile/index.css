@@ -1,0 +1,35 @@
+.profile-container {
+  height: 170px;
+  width: 200px;
+  background-image: url('https://assets.ccbp.in/frontend/react-js/profile-bg.png');
+  background-size: cover;
+  border-radius: 5px;
+}
+p {
+  color: grey;
+  font-size: 12px;
+}
+.horizontal-line {
+  height: 1px;
+  width: 320px;
+  border: 2px solid white;
+}
+.bg-container {
+  background-color: black;
+  height: 90vh;
+  width: 100vw;
+  background-size: cover;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 30px;
+  color: white;
+}
+h1 {
+  font-size: 13px;
+  color: white;
+}
+.err-heading {
+  color: red;
+}

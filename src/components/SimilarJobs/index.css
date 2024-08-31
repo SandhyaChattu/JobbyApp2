@@ -1,0 +1,17 @@
+.list-container {
+  height: 290px;
+  width: 3000px;
+  background-color: grey;
+  border-radius: 5px;
+}
+.logo-container {
+  display: flex;
+  flex-direction: row;
+}
+.log {
+  height: 30px;
+  width: 30px;
+}
+p {
+  color: white;
+}

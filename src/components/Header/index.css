@@ -1,0 +1,19 @@
+.nav-bar {
+  height: 100px;
+  width: 100vw;
+  background-color: #2c364c;
+}
+li {
+  margin: 10px;
+  color: white;
+}
+.ListContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+}
