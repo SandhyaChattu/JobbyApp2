@@ -9,20 +9,19 @@
 .home-sub-container {
   height: 70vh;
   width: 70vw;
-  padding:30px;
-  padding-top:0px;
-
+  padding: 30px;
+  padding-top: 0px;
 }
 .job-button {
   background-color: blue;
   color: white;
-  height:50px;
-  width:100px;
-  border-radius:9px;
+  height: 50px;
+  width: 100px;
+  border-radius: 9px;
 }
 .heading {
   color: white;
-  font-size:25px;
+  font-size: 25px;
   font-family: roboto;
 }
 .description {
