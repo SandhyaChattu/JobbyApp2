@@ -2,11 +2,14 @@ import {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
+import {FaSearch} from 'react-icons/fa'
+
 import Profile from '../Profile'
 import Header from '../Header'
 import CheckBoxItem from '../CheckBoxItem'
 import SalaryRange from '../SalaryRange'
 import JobListItem from '../JobListItem'
+
 import './index.css'
 
 const employmentTypesList = [
@@ -46,6 +49,7 @@ const salaryRangesList = [
     label: '40 LPA and above',
   },
 ]
+
 const apiConstants = {
   Initial: 'INITIAL',
   Success: 'SUCCESS',
@@ -58,6 +62,7 @@ class Jobs extends Component {
     employmentType: [],
     searchInput: '',
     apiStatusJobUrl: apiConstants.Initial,
+    location: '',
   }
 
   componentDidMount() {
@@ -80,7 +85,7 @@ class Jobs extends Component {
 
     if (response.ok) {
       const dbResponse = await response.json()
-      console.log(dbResponse)
+      // console.log(dbResponse)
       this.setState({
         jobsList: dbResponse.jobs,
         apiStatusJobUrl: apiConstants.Success,
@@ -92,7 +97,7 @@ class Jobs extends Component {
 
   changeEmploymentType = JobType => {
     const {employmentType} = this.state
-    console.log(employmentType)
+    // console.log(employmentType)
 
     if (employmentType.includes(JobType)) {
       this.setState(
@@ -122,8 +127,15 @@ class Jobs extends Component {
     }
   }
 
+  locationChange = item => {
+    // console.log(item)
+    const {location} = this.state
+    this.setState({location: item})
+    console.log(location)
+  }
+
   renderSuccessView = () => {
-    const {jobsList} = this.state
+    const {jobsList, location} = this.state
     return jobsList.length > 0 ? (
       <div>
         <ul className="jobs-list">
@@ -146,20 +158,26 @@ class Jobs extends Component {
   }
 
   renderFailureView = () => (
-    <div>
+    <div className="no-jobs-view">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
         alt="failure view"
+        className="no-jobs-img"
       />
-      <h1>Oops!Something Went Wrong</h1>
-      <p>We cannot seem to find the page you are looking for</p>
-      <button> Retry </button>
+      <h1 className="no-jobs-heading">Oops! Something Went Wrong</h1>
+      <p className="no-jobs-description">
+        We cannot seem to find the page you are looking for
+      </p>
+      <button className="jobs-failure-button" onClick={this.getJob}>
+        {' '}
+        Retry{' '}
+      </button>
     </div>
   )
 
   LoaderView = () => (
-    <div data-testid="loader">
-      <Loader type="ThreeDots" data-testid="loader" />
+    <div data-testid="loader-container">
+      <Loader type="ThreeDots" data-testid="loader" height="50" width="50" />
     </div>
   )
 
@@ -187,7 +205,7 @@ class Jobs extends Component {
     } = this.state
     // console.log(jobsList)
     const token = Cookies.get('jwt_token')
-    console.log(token)
+    // console.log(token)
     if (token === undefined) {
       return <Redirect to="/login" />
     }
@@ -199,6 +217,7 @@ class Jobs extends Component {
             <div className="profile-container">
               <Profile />
             </div>
+            <h1 className="side-bar-heading">Type Of Employment</h1>
             <ul className="employmentList">
               {employmentTypesList.map(eachItem => (
                 <CheckBoxItem
@@ -208,6 +227,8 @@ class Jobs extends Component {
                 />
               ))}
             </ul>
+            <hr />
+            <h1 className="side-bar-heading">Salary Range</h1>
             <ul className="salaryRangeList">
               {salaryRangesList.map(eachItem => (
                 <SalaryRange
@@ -217,16 +238,22 @@ class Jobs extends Component {
                 />
               ))}
             </ul>
+            <hr />
           </div>
 
-          <div className="search-container">
-            <button data-testid="searchButton" aria-label="close">
-              <input
-                type="search"
-                onChange={this.changeSearchInput}
-                value={searchInput}
-                placeholder="Search"
-              />
+          <div className="search-input-container-desktop">
+            <input
+              type="search"
+              onChange={this.changeSearchInput}
+              value={searchInput}
+              placeholder="Search"
+              className="search-input-desktop"
+            />
+            <button
+              data-testid="search-button-container-desktop"
+              aria-label="close"
+            >
+              <FaSearch data-testid="search-icon-desktop" />
             </button>
           </div>
           <div>{this.renderJobs()}</div>
