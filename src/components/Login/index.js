@@ -64,7 +64,7 @@ class Login extends Component {
             type="text"
             id="userName"
             onChange={this.changeUserName}
-            placeholder="Username"
+            placeholder="rahul"
           />
           <br />
           <label htmlFor="password">PASSWORD</label>
@@ -72,7 +72,7 @@ class Login extends Component {
             type="text"
             id="password"
             onChange={this.changePassword}
-            placeholder="password"
+            placeholder="rahul@2021"
           />
           <br />
           <button className="submit-button" type="submit">
