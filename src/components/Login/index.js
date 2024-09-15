@@ -1,84 +1,94 @@
-import './index.css'
-import {Redirect} from 'react-router-dom'
 import {Component} from 'react'
+import {Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
+import './index.css'
 
 class Login extends Component {
-  state = {username: '', password: '', errorMsg: ''}
+  state = {username: '', password: '', showSubmitError: false, errorMsg: ''}
 
-  setAuthorization = jwtToken => {
-    const {history} = this.props
-
-    const token = Cookies.set('jwt_token', jwtToken, {expires: 30})
-    history.replace('/')
-  }
-
-  changeUserName = event => {
+  onChangeUsername = event => {
     this.setState({username: event.target.value})
   }
 
-  changePassword = event => {
+  onChangePassword = event => {
     this.setState({password: event.target.value})
   }
 
-  requestToHome = async event => {
+  onSubmitSuccess = jwtToken => {
+    const {history} = this.props
+    Cookies.set('jwt_token', jwtToken, {
+      expires: 30,
+    })
+    history.replace('/')
+  }
+
+  onSubmitFailure = errorMsg => {
+    this.setState({errorMsg, showSubmitError: true})
+  }
+
+  submitForm = async event => {
     event.preventDefault()
     const {username, password} = this.state
-    const url = 'https://apis.ccbp.in/login'
-    const UserDetails = {
-      username,
-      password,
-    }
+    const userDetails = {username, password}
+    const apiUrl = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
-      body: JSON.stringify(UserDetails),
+      body: JSON.stringify(userDetails),
     }
-
-    const response = await fetch(url, options)
-    const dbResponse = await response.json()
-    console.log(response)
-
+    const response = await fetch(apiUrl, options)
+    const data = await response.json()
     if (response.ok === true) {
-      this.setAuthorization(dbResponse.jwt_token)
+      this.onSubmitSuccess(data.jwt_token)
     } else {
-      this.setState({errorMsg: dbResponse.error_msg})
+      this.onSubmitFailure(data.error_msg)
     }
   }
 
   render() {
-    const {errorMsg} = this.state
+    const {username, password, showSubmitError, errorMsg} = this.state
     const token = Cookies.get('jwt_token')
     if (token !== undefined) {
-      return <Redirect to="/jobs" />
+      return <Redirect to="/" />
     }
-
     return (
-      <div className="bg-container">
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
-          alt="website logo"
-        />
-        <form className="login-container" onSubmit={this.requestToHome}>
-          <label htmlFor="userName">USERNAME</label>
-          <input
-            type="text"
-            id="userName"
-            onChange={this.changeUserName}
-            placeholder="rahul"
+      <div className="login-container">
+        <form className="form-container" onSubmit={this.submitForm}>
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+            className="login-website-logo"
+            alt="website logo"
           />
-          <br />
-          <label htmlFor="password">PASSWORD</label>
-          <input
-            type="text"
-            id="password"
-            onChange={this.changePassword}
-            placeholder="rahul@2021"
-          />
-          <br />
-          <button className="submit-button" type="submit">
+          <div className="input-container">
+            <label className="input-label" htmlFor="username">
+              USERNAME
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              className="username-input-field"
+              onChange={this.onChangeUsername}
+              placeholder="Username"
+            />
+          </div>
+          <div className="input-container">
+            <label className="input-label" htmlFor="password">
+              PASSWORD
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              className="password-input-field"
+              onChange={this.onChangePassword}
+              placeholder="Password"
+            />
+          </div>
+          <p>Username : rahul , Password : rahul@2021</p>
+          <button type="submit" className="login-button">
             Login
           </button>
-          <p className="err-msg">{errorMsg}</p>
+          {showSubmitError && <p className="error-message">*{errorMsg}</p>}
         </form>
       </div>
     )

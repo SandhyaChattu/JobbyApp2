@@ -1,7 +1,6 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
-import Header from '../Header'
 import './index.css'
 
 const apiConstants = {
@@ -69,20 +68,22 @@ class Profile extends Component {
 
   loaderView = () => <Loader type="Three-Dots" data-testid="loader" />
 
-  render() {
-    const {apistatusProfile, isWantLoader} = this.state
-    console.log(apistatusProfile)
-
+  renderProfile = () => {
+    const {apistatusProfile} = this.state
     switch (apistatusProfile) {
       case apiConstants.Success:
         return this.ProfileSuccessView()
       case apiConstants.Failure:
         return this.ProfileFailureView()
       case apiConstants.Loading:
-        return this.loaderView
+        return this.loaderView()
       default:
         return null
     }
+  }
+
+  render() {
+    return <>{this.renderProfile()}</>
   }
 }
 export default Profile
